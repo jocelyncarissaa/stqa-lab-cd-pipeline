@@ -43,7 +43,12 @@ def handle_pets():
     if request.method == 'GET':
         category = request.args.get('category')
         if category:
-            matching_pets = [pet for pet in pets.values() if pet['category'] == category]
+            # PENTING: Lakukan konversi ke lowercase saat membandingkan
+            category_lower = category.lower() 
+            matching_pets = [
+                pet for pet in pets.values() 
+                if pet['category'].lower() == category_lower
+            ]
             return jsonify(matching_pets)
         
         return jsonify(list(pets.values()))
