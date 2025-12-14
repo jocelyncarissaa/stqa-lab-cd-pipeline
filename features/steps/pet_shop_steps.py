@@ -48,22 +48,17 @@ def step_impl(context, pet_name, pet_category, pet_gender, pet_birthday):
     assert pet_gender in results_text, "Gender problem"
     assert pet_birthday in results_text, "Birthday problem"
 
-@when('I update pet ID "{pet_id}" with only a new name "{pet_name}"')
-def step_impl(context, pet_id, pet_name):
-
-    # Isi ID
+@when('I update the created pet with only a new name "{pet_name}"')
+def step_impl(context, pet_name):
     pet_id_el = context.driver.find_element(By.ID, "pet_id")
     pet_id_el.clear()
-    pet_id_el.send_keys(pet_id)
+    pet_id_el.send_keys(context.created_pet_id)
 
-    # Update name saja
     name_el = context.driver.find_element(By.ID, "pet_name")
     name_el.clear()
     name_el.send_keys(pet_name)
 
-    # Klik update
     context.driver.find_element(By.ID, "update-btn").click()
-    time.sleep(0.5)
 
 @when('I delete pet ID "{pet_id}"')
 def step_impl(context, pet_id):

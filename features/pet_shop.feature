@@ -13,7 +13,7 @@ Feature: Pet CRUD & Search
 
   Scenario: Validate pet update
     When I create a pet with name "Buddy", category "dog", gender "MALE", birthday "2024-01-01"
-    And I update pet ID "1" with only a new name "Buddy Jr."
+    And I update the created pet with only a new name "Buddy Jr."
     Then the pet list should show "Buddy Jr." with the correct details: "dog", "MALE", "2024-01-01"
 
   Scenario: Validate pet delete
