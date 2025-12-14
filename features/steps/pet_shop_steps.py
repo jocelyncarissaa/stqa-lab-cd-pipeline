@@ -50,15 +50,43 @@ def step_impl(context, pet_name, pet_category, pet_gender, pet_birthday):
 
 @when('I update the created pet with only a new name "{pet_name}"')
 def step_impl(context, pet_name):
-    pet_id_el = context.driver.find_element(By.ID, "pet_id")
-    pet_id_el.clear()
-    pet_id_el.send_keys(context.created_pet_id)
+    # Data asli pet yang dibuat di step sebelumnya
+    original_category = "dog"
+    original_gender = "MALE"
+    original_birthday = "2024-01-01"
+    pet_id = "1" 
 
-    name_el = context.driver.find_element(By.ID, "pet_name")
-    name_el.clear()
-    name_el.send_keys(pet_name)
+    # 1. Clear semua field (untuk kebersihan)
+    context.driver.find_element(By.ID, "pet_id").clear()
+    context.driver.find_element(By.ID, "pet_name").clear()
+    context.driver.find_element(By.ID, "pet_category").clear()
+    date_element = context.driver.find_element(By.ID, "pet_birthday")
+    context.driver.execute_script("arguments[0].value = '';", date_element)
 
+    # 2. ISI ULANG SEMUA DATA LAMA, kecuali nama
+    
+    # Isi ID pet yang akan diupdate
+    context.driver.find_element(By.ID, "pet_id").send_keys(pet_id) 
+    
+    # Isi NAMA BARU
+    context.driver.find_element(By.ID, "pet_name").send_keys(pet_name) 
+    
+    # Isi KATEGORI LAMA (untuk mencegah Category problem)
+    context.driver.find_element(By.ID, "pet_category").send_keys(original_category)
+    
+    # Isi GENDER LAMA (untuk mencegah Gender problem)
+    context.driver.find_element(By.ID, "pet_gender").send_keys(original_gender)
+    
+    # Isi BIRTHDAY LAMA
+    context.driver.execute_script(
+        "arguments[0].value = arguments[1];", 
+        date_element, 
+        original_birthday
+    )
+
+    # 3. Klik Update:
     context.driver.find_element(By.ID, "update-btn").click()
+    time.sleep(0.5)
 
 @when('I delete pet ID "{pet_id}"')
 def step_impl(context, pet_id):
