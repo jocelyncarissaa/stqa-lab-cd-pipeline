@@ -50,22 +50,23 @@ def step_impl(context, pet_name, pet_category, pet_gender, pet_birthday):
 
 @when('I update pet ID "{pet_id}" with only a new name "{pet_name}"')
 def step_impl(context, pet_id, pet_name):
-    # Membersihkan semua field yang relevan agar hanya ID dan Nama yang dikirim
+    # 1. Clear input field:
     context.driver.find_element(By.ID, "pet_id").clear()
     context.driver.find_element(By.ID, "pet_name").clear()
     context.driver.find_element(By.ID, "pet_category").clear()
     
-    # Tambahkan pembersihan untuk input tanggal
+    # 2. Clear date input (menggunakan JS karena .clear() sering gagal untuk type=date)
     date_element = context.driver.find_element(By.ID, "pet_birthday")
-    context.driver.execute_script("arguments[0].value = '';", date_element) # Clear input type=date
-
-    # Gender (Select element tidak memiliki .clear(), tapi kita bisa reset nilainya)
-    # Ini mungkin tidak perlu jika backend Flask hanya mengambil data yang ada.
+    context.driver.execute_script("arguments[0].value = '';", date_element)
     
-    # Mengisi ulang ID dan Nama baru
+    # 3. Reset select field (pet_gender) ke opsi pertama (MALE)
+    context.driver.find_element(By.ID, "pet_gender").send_keys("MALE")
+
+    # 4. Input nilai update:
     context.driver.find_element(By.ID, "pet_id").send_keys(pet_id)
     context.driver.find_element(By.ID, "pet_name").send_keys(pet_name)
     
+    # 5. Klik Update:
     context.driver.find_element(By.ID, "update-btn").click()
     time.sleep(0.5)
 
