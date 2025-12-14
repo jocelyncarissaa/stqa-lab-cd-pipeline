@@ -50,23 +50,18 @@ def step_impl(context, pet_name, pet_category, pet_gender, pet_birthday):
 
 @when('I update pet ID "{pet_id}" with only a new name "{pet_name}"')
 def step_impl(context, pet_id, pet_name):
-    # 1. Clear input field:
-    context.driver.find_element(By.ID, "pet_id").clear()
-    context.driver.find_element(By.ID, "pet_name").clear()
-    context.driver.find_element(By.ID, "pet_category").clear()
-    
-    # 2. Clear date input (menggunakan JS karena .clear() sering gagal untuk type=date)
-    date_element = context.driver.find_element(By.ID, "pet_birthday")
-    context.driver.execute_script("arguments[0].value = '';", date_element)
-    
-    # 3. Reset select field (pet_gender) ke opsi pertama (MALE)
-    context.driver.find_element(By.ID, "pet_gender").send_keys("MALE")
 
-    # 4. Input nilai update:
-    context.driver.find_element(By.ID, "pet_id").send_keys(pet_id)
-    context.driver.find_element(By.ID, "pet_name").send_keys(pet_name)
-    
-    # 5. Klik Update:
+    # Isi ID
+    pet_id_el = context.driver.find_element(By.ID, "pet_id")
+    pet_id_el.clear()
+    pet_id_el.send_keys(pet_id)
+
+    # Update name saja
+    name_el = context.driver.find_element(By.ID, "pet_name")
+    name_el.clear()
+    name_el.send_keys(pet_name)
+
+    # Klik update
     context.driver.find_element(By.ID, "update-btn").click()
     time.sleep(0.5)
 
